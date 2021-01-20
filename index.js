@@ -4,8 +4,6 @@ const dotenv = require('dotenv').config();
 const Discord = require('discord.js');
 const fs = require('fs');
 const mongoose = require('mongoose');
-const ytdl = require('ytdl-core');
-const search = require('youtube-search')
 
 // ==== =============== ==== //
 const client = new Discord.Client();

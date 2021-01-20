@@ -4,7 +4,7 @@ module.exports = {
     nombre: "NombreDelComando",
     alias: ['Aliases'],
     description: "Description",
-    run: (client, message, args) => {
+    run: async (client, message, args) => {
         //code
     }
 }

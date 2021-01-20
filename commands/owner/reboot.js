@@ -2,7 +2,7 @@ module.exports = {
         nombre: "reboot",
         alias: ['restart', "reload"],
         description: "Description",
-        run: (client, message, args) => {
+        run: async (client, message, args) => {
 
         if (message.author.id == "668256065174896681") {
 
