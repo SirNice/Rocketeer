@@ -12,7 +12,11 @@ module.exports = {
             message.member
 
         const embed = new Discord.MessageEmbed()
-            .setImage(member.user.displayAvatarURL())
+            .setTitle('Avatar')
+            .setImage(member.user.displayAvatarURL({
+                dynamic: true,
+                size: 1024
+            }))
             .setColor(member.displayHexColor)
             .setFooter(
                 (member.id === message.member.id) ? `Tu avatar ${member.displayName}` : `Avatar de ${member.displayName}`

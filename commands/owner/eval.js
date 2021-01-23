@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 
 module.exports = {
     nombre: "eval",
-    alias: [''],
+    alias: [],
     description: "eval",
     run: async (client, message, args) => {
 

@@ -16,8 +16,8 @@ module.exports = {
             return message.channel.send(`No tienes permisos de ${permisos}.`)
         }
 
-        let persona = await message.mentions.members.first() || 
-            message.guild.members.resolve(args[0]) 
+        let persona = await message.mentions.members.first() ||
+            message.guild.members.resolve(args[0])
 
         if (!persona) return message.channel.send('Debe mencionar o poner la ID de alguien para darle el rol.')
 
@@ -25,8 +25,8 @@ module.exports = {
             return message.channel.send('Debes mencionar o poner el nombre o ID del rol a dar.')
         }
 
-        let rol = await message.mentions.roles.first() || 
-            message.guild.roles.resolve(args[1]) || 
+        let rol = await message.mentions.roles.first() ||
+            message.guild.roles.resolve(args[1]) ||
             message.guild.roles.cache.find(r => r.name == args.slice(1).join(' '))
 
         if (!rol) {
