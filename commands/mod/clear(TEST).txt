@@ -26,15 +26,15 @@ module.exports = {
             cantidad = 100
         }
 
-        message.channel.fetchMessages({
+        message.channel.fetch({
             limit: cantidad
-        }).then(mensajes => {
+        }).then(msg => {
             message.channel.bulkDelete(
-                mensajes.filter(m => !m.pinned) //para no borrar los mensajes anclados
+                message.channel.filter(m => !m.pinned) //para no borrar los mensajes anclados
             ).then(() => {
                 message.channel.send(`**``Done``** | Borre los ${cantidad} mensajes.`).then(m => m.delete(20000))
             }).catch(e => {
-                message.channel.send('**``Done``** | Ocurrio un error y no pude borrar los mensajes.')
+                message.channel.send('**``Error``** | Ocurrio un error y no pude borrar los mensajes.')
             })
         })
     }

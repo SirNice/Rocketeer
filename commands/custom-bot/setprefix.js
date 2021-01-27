@@ -7,12 +7,16 @@ module.exports = {
     description: "cambia el prefix del servidor",
     run: async (client, message, args) => {
 
+        let permiso = 'ADMINISTRATOR'
+
+        if (!message.guild.me.permissions.has(permiso)) {
+            return message.channel.send("**``Error``** | No tienes permisos de ``" + permiso + "``.");
+        }
 
         let nuevoprefijo = args[0];
-        //ahora ponemos condicionales con if(condicion)
-        //--------------//
-        //por si no escribe el nuevo prefijo
-        if (!nuevoprefijo) return message.channel.send('Coloca el nuevo prefijo.')
+
+
+        if (!nuevoprefijo) return message.channel.send('**``Error``** | Coloca el nuevo prefijo.')
         //ahora buscamos un modelo con la id del servidor
         let modelo = await GuildModel.findOne({
             id: message.guild.id
@@ -29,7 +33,7 @@ module.exports = {
             prefix: nuevoprefijo
         }) : await dt.save()
         //y mandamos un mensaje de confirmacion
-        message.channel.send(`Mi nuevo prefijo ahora es ${nuevoprefijo}`)
+        message.channel.send(`**\`\`Done\`\`** | Mi nuevo prefijo ahora es **${nuevoprefijo}**`)
 
 
     }

@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 
 module.exports = {
-    nombre: "detectrole",
+    nombre: "detectrol",
     alias: ['findrole'],
     description: "Description",
     run: async (client, message, args) => {

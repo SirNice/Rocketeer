@@ -8,9 +8,12 @@ module.exports = {
     run: async (client, message, args) => {
 
 
-        randomPuppy().then(url => {
+        randomPuppy().then(url  => {
 
-            message.channel.send(url);
+            const randomPuppy =  new Discord.MessageEmbed()
+            .setImage(url)
+            .setColor("RANDOM")
+            message.channel.send(randomPuppy);
 
 
         }).catch(err => message.channel.send("Hubo un error, inténtelo nuevamente."));

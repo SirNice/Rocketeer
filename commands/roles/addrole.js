@@ -1,9 +1,9 @@
 const Discord = require("discord.js");
 
 module.exports = {
-    nombre: "Addrole",
+    nombre: "addrole",
     alias: [],
-    description: "agrga rol a user",
+    description: "agrega rol a user",
     run: async (client, message, args) => {
 
         let permisos = 'MANAGE_ROLES';

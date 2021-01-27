@@ -15,10 +15,10 @@ module.exports = {
         var perms = message.member.hasPermission("KICK_MEMBERS");
 
         if (!perms) return message.channel.send("**``Error``** | No tienes Permisos para usar este comando.");
-        if (message.mentions.users.size < 1) return message.reply('Debe mencionar a alguien.').catch(console.error);
+        if (message.mentions.users.size < 1) return message.reply('**``Error``** | Debe mencionar a alguien.').catch(console.error);
 
         if (!razon) return message.channel.send('**``Error``** | Escriba una razón, `-kick @username [razón]`');
-        if (!message.guild.member(user).kickable) return message.reply('No puedo patear al usuario mencionado.');
+        if (!message.guild.member(user).kickable) return message.reply('**``Error``** | No puedo patear al usuario mencionado.');
 
         message.guild.member(user).kick(razon);
         message.channel.send(`**``Done``** | **${user.username}**, fue pateado del servidor, razón: ${razon}.`);

@@ -1,9 +1,9 @@
 const Discord = require("discord.js");
 
 module.exports = {
-    nombre: "n",
+    nombre: "roll100",
     alias: [],
-    description: "Description",
+    description: "Rueda la maquina para sacar un número determinado al azar usando Math.random(). números entre 1 al 100",
     run: async (client, message, args) => {
 
 

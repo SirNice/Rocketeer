@@ -1,9 +1,9 @@
 const Discord = require("discord.js");
 
 module.exports = {
-    nombre: "n",
+    nombre: "serverinfo",
     alias: [],
-    description: "Description",
+    description: "Muestra la información de un servidor en un mensaje.",
     run: async (client, message, args) => {
         /*
 

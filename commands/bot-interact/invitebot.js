@@ -11,7 +11,12 @@ module.exports = {
             .then(link => {
                 message.channel.send(`Link de invitación: ${link}`);
 
-            });
+            }).catch(err => {})
 
     }
 }
+
+/*
+Lista de permisos:
+https://portalmybot.com/guia/mybot/uso-roles#lista-permisos
+*/
