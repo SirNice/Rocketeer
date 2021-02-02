@@ -6,7 +6,12 @@ const {
 
 const GuildModel = require("../../database/models/prefix_db");
 
+const { queue } = require('../../index.js')
+
 module.exports = async (client, message) => {
+
+    const serverQueue = queue.get(message.guild.id);
+
 
     // ============ BAD WORDS ============ //
 
@@ -17,7 +22,7 @@ module.exports = async (client, message) => {
     let messageContent = message.content.toLowerCase();
     if (words.some(word => messageContent.includes(word))) {
         message.channel.send(`${message.author} estamos de acuerdo.`)
-            .then(() => message.delete())
+            .then(() => console.log('si'))
     }
 
     // ============ BAD WORDS ============ //
