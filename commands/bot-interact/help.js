@@ -20,18 +20,18 @@ module.exports = {
             .setColor("RANDOM")
 
         embedHelp('bot-interact')
-        embedHelp('custom-bot')
-        embedHelp('custom-responses')
+        // embedHelp('custom-bot')
+        // embedHelp('custom-responses')
         embedHelp('fun')
-        embedHelp('image')
-        embedHelp('level')
+        //embedHelp('image')
+       // embedHelp('level')
         embedHelp('mod')
-        embedHelp('music')
+        //embedHelp('music')
         embedHelp('roles')
-        embedHelp('ticket')
+        //embedHelp('ticket')
         embedHelp('utility')
-        embedHelp('welcome')
-        embedHelp('wiki')
+        //embedHelp('welcome')
+        //embedHelp('wiki')
 
         async function embedHelp(subcarpet) {
 
