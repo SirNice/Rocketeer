@@ -1,5 +1,5 @@
 {
-  "name": "rocketeer",
+  "name": "miller",
   "version": "1.0.1",
   "description": "Un bot de un cualquiera, con fines de aprendizaje.",
   "main": "index.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/SirNice/Rocketeer.git"
+    "url": "https://github.com/SirNice/Miller.git"
   },
   "author": "SirNice (Michael Liendo)",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/SirNice/Rocketeer/issues"
+    "url": "https://github.com/SirNice/Miller/issues"
   },
-  "homepage": "https://github.com/SirNice/Rocketeer#readme",
+  "homepage": "https://github.com/SirNice/Miller#readme",
   "dependencies": {
     "discord.js": "^12.5.0",
     "dotenv": "^8.2.0",
@@ -29,6 +29,7 @@
     "mongoose": "^5.10.15",
     "opusscript": "0.0.7",
     "random-puppy": "^1.1.0",
+    "superagent": "^6.1.0",
     "youtube-search": "^1.1.6",
     "ytdl-core": "^4.4.5"
   }

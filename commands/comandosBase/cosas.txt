@@ -1,0 +1,1316 @@
+
+module.exports = {
+    nombre: "n",
+    alias: [],
+    description: "Description",
+    run: async (client, message, args) => {
+        //code
+    }
+}
+
+//-----------------HTTP-----------------//
+const express = require("express");
+const app = express();
+const dreams = ["Find and count some sheep", "Climb a really tall mountain", "Wash the dishes"];
+app.use(express.static("public"));
+app.get("/", (req, res) => res.sendFile(__dirname + "/views/index.html"));
+const listener = app.listen(process.env.PORT, () => console.log("Your app is listening on port " + listener.address().port));
+
+//-------------------CONST-------------------//
+const Discord = require("discord.js");
+const client = new Discord.Client();
+const config = require("./config.json");
+const fs = require('fs');
+const megadb = require('megadb');
+const superagent = require('superagent')
+const {
+    MakeRole,
+    SetChannelperms,
+    Convert,
+    SuccessEmbed,
+    ErrorEmbed
+} = require("./utilities/functions.js");
+var Weez = require("weez");
+var weez = new Weez.WeezAPI("TU-CLAVE");
+//let db = require("./db.json");
+let clientmemesURL = JSON.parse(require('fs').readFileSync('./memes.json', 'utf8'))
+
+
+
+//-------------------LETS-------------------//
+
+let estados = "No me los se xd";
+
+
+
+//--------------------reporter errores/advertencias/debugs_a_consola-------------------//
+/*client.on("error", (e) => console.error(e));
+client.on("warn", (e) => console.warn(e));
+client.on("debug", (e) => console.info(e));*/
+//---------------------------------Eventos----------------------------------//
+client.on("ready", () => {
+    console.log("Estoy listo!");
+
+    setInterval(function () {
+        var estados = ["Verde", "Nice.", "Casamiento", "en lloracion"]
+        let estado = estados[Math.floor(estados.length * Math.random())];
+        client.user.setPresence({
+            status: "online",
+            activity: {
+                name: estado,
+                type: "PLAYING",
+            }
+        })
+    }, 15000);
+
+    //ve al error y me ayudas voy a cagar y ya vengo de todas formas ese sistema no me conevenze mucho? vos que decis lo dejamos o lo borramos? xd
+    // escribeme al discord, que no entiendo nada DISCORD PERRA zorrita nice
+});
+//-------------------------------------------------Reconeccion-------------------------------//
+
+client.on('reconnecting', () => {
+
+    let today = new Date();
+    let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+    let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+
+
+    client.channels.cache.get('709081897010987069').send(`[${date}][${time}]: Bot se ha vuelto a conectar, con ${client.users.size} usuarios.`)
+
+
+    console.log(`[${date}${time}] : Bot se ha vuelto a conectar, con ${client.users.size} usuarios.`);
+
+})
+
+
+//-------------------------------------------------Logs--------------------------------------//
+client.on("ChannelCreate", (channel) => {
+
+    if (!channel.member(client.user).hasPermission('VIEW_AUDIT_LOG')) return;
+
+    if (!channel.guild) return;
+
+    channel.guild.fetchAuditLogs().then(logs => {
+
+        let userID = logs.entries.first().executor.id;
+
+        let userAvatar = logs.entries.first().executor.avatarURL();
+
+        let msgChannel = new Discord.MessageEmbed()
+            .setTitle('**CANAL CREADO**')
+            .setColor('RED')
+            .setThumbnail(userAvatar)
+            .setDescription(`Canal: ${channel.name} (ID: ${channel.id})\nTipo: ${channel.type}\nPor: <@${userID}> (ID: ${userID})`)
+            .setTimestamp()
+            .setFooter(channel.guild.name, channel.guild.iconURL())
+
+        let channel = client.channels.cache.get('709073468041330720');
+        channel.send(msgChannel);
+
+    })
+});
+
+client.on("ChannelDelete", (channel) => {
+
+    if (!channel.member(client.user).hasPermission('VIEW_AUDIT_LOG')) return;
+
+    if (!channel.guild) return;
+
+    channel.guild.fetchAuditLogs().then(logs => {
+
+        let userID = logs.entries.first().executor.id;
+
+        let userAvatar = logs.entries.first().executor.avatarURL();
+
+        let msgChannel = new Discord.MessageEmbed()
+            .setTitle('**CANAL ELIMINADO**')
+            .setColor('RED')
+            .setThumbnail(userAvatar)
+            .setDescription(`Canal: ${channel.name} (ID: ${channel.id})\nTipo: ${channel.type}\nPor: <@${userID}> (ID: ${userID})`)
+            .setTimestamp()
+            .setFooter(channel.guild.name, channel.guild.iconURL())
+
+        let canal = client.channels.cache.get('709073468041330720');
+        canal.send(msgChannel);
+
+    })
+});
+
+client.on("channelPinsUpdate", (channel, date) => {
+
+    let id = channel.id
+
+    channel.send('**Se actualizo un mensaje anclado en este canal**')
+
+    client.channels.cache.get('709076724851146842').send(`Se actualizo un mensaje anclado en el canal <#${id}>, fecha: NaN`)
+
+
+
+});
+
+client.on("channelUpdate", (oldChannel, newChannel) => {
+
+    if (!oldChannel.guild) return;
+
+    oldChannel.guild.fetchAuditLogs().then(logs => {
+
+        let userID = logs.entries.first().executor.id;
+
+        if (oldChannel.name !== newChannel.name) {
+
+            let msgName = new Discord.MessageEmbed()
+                .setTitle('**CANAL EDITADO**')
+                .setColor('RED')
+                .setDescription(`Nombre anterior: **${oldChannel.name}**\nNuevo nombre: **${newChannel.name}**\nCanal ID: **${oldChannel.id}**\nPor: <@${userID}> (ID: ${userID})`)
+                .setTimestamp()
+                .setFooter(oldChannel.guild.name, oldChannel.guild.iconURL())
+
+            let channel = oldChannel.guild.channels.cache.get('709073468041330720');
+            channel.send(msgName);
+        }
+    })
+});
+
+client.on("emojiCreate", (emoji) => {
+
+    if (!emoji.guild.member(client.user).hasPermission('VIEW_AUDIT_LOG')) return;
+
+    let typeEmoji = emoji.animated ? 'Si' : 'No';
+
+
+    emoji.guild.fetchAuditLogs().then(logs => {
+
+        let userID = logs.entries.first().executor.id;
+
+
+        let msgChannel = new Discord.MessageEmbed()
+            .setTitle('**EMOJI CREADO**')
+            .setColor('RED')
+            .setThumbnail(emoji.url)
+            .setDescription(`Emoji: ${emoji.name} (ID: ${emoji.id})\nAnimado: ${typeEmoji}\nPor: <@${userID}> (ID: ${userID})`)
+            .setTimestamp()
+            .setFooter(emoji.guild.name, emoji.guild.iconURL())
+
+        let channel = client.channels.cache.get('709078419673186384');
+        channel.send(msgChannel);
+
+    })
+
+});
+
+client.on("emojiDelete", (emoji) => {
+
+    if (!emoji.guild.member(client.user).hasPermission('VIEW_AUDIT_LOG')) return;
+
+    let typeEmoji = emoji.animated ? 'Si' : 'No';
+
+    emoji.guild.fetchAuditLogs().then(logs => {
+
+        let userID = logs.entries.first().executor.id;
+
+        let msgChannel = new Discord.MessageEmbed()
+            .setTitle('**EMOJI ELIMINADO**')
+            .setColor('RED')
+            .setThumbnail(emoji.url)
+            .setDescription(`Emoji: ${emoji.name} (ID: ${emoji.id})\nAnimado: ${typeEmoji}\nPor: <@${userID}> (ID: ${userID})`)
+            .setTimestamp()
+            .setFooter(emoji.guild.name, emoji.guild.iconURL())
+
+        let channel = client.channels.cache.get('709078419673186384');
+        channel.send(msgChannel);
+
+    })
+});
+
+client.on("emojiUpdate", (oldEmoji, newEmoji) => {
+
+    client.channels.cache.get('709078419673186384').send(`Emoji **${oldEmoji.name}** fue actualizado a **${newEmoji.name}**`)
+
+
+});
+
+client.on("guildBanAdd", (guild, user) => {
+
+    if (!guild.member(client.user).hasPermission('VIEW_AUDIT_LOG')) return;
+
+
+    guild.fetchAuditLogs().then(logs => {
+
+        let userID = logs.entries.first().executor.id;
+
+        let userAvatar = logs.entries.first().executor.avatarURL();
+
+        if (userID === client.user.id) return;
+
+        let msgChannel = new Discord.MessageEmbed()
+            .setTitle('**USUARIO BLOQUEADO**')
+            .setColor('RED')
+            .setThumbnail(userAvatar)
+            .setDescription(`**Usuario bloqueado correctamente**\nUsuario bloqueado/baneado: <@${user.id}> (ID: ${user.id})\nPor: <{userID}> (ID: ${userID})`)
+            .setTimestamp()
+            .setFooter(guild.name, guild.iconURL())
+
+
+        let channel = client.channels.cache.get('709073424374562836');
+        channel.send(msgChannel);
+
+    })
+
+});
+
+client.on("guildBanRemove", (guild, user) => {
+
+    if (!guild.member(client.user).hasPermission('VIEW_AUDIT_LOG')) return;
+
+    guild.fetchAuditLogs().then(logs => {
+
+        let userID = logs.entries.first().executor.id;
+
+        let userAvatar = logs.entries.first().executor.avatarURL();
+
+        if (userID === client.user.id) return;
+
+        let msgChannel = new Discord.MessageEmbed()
+            .setTitle('**USUARIO DESBLOQUEADO**')
+            .setColor('RED')
+            .setThumbnail(userAvatar)
+            .setDescription(`**Usuario desbloqueado correctamente**\nUsuario desbloqueado/desbaneado: <@${user.id}> (ID: ${user.id})\nPor: <@${userID}> (ID: ${userID})`)
+            .setTimestamp()
+            .setFooter(guild.name, guild.iconURL())
+
+
+        let channel = client.channels.cache.get('709073424374562836');
+        channel.send(msgChannel);
+
+    })
+});
+
+client.on("guildMemberUpdate", (oldMember, newMember) => {
+
+    if (!oldMember.guild.member(client.user).hasPermission('VIEW_AUDIT_LOG')) return
+
+    oldMember.guild.fetchAuditLogs().then(logs => {
+
+        let userID = logs.entries.first().executor.id;
+
+        let userAvatar = logs.entries.first().executor.avatarURL();
+
+
+        if (oldMember.nickname !== newMember.nickname) {
+            let msgChannel = new Discord.MessageEmbed()
+                .setTitle('**NICKNAME ACTUALIZADO**')
+                .setColor('RED')
+                .setThumbnail(userAvatar)
+                .setDescription(`Usuario: ${oldMember.user.username} (ID: ${oldMember.user.id})\nNickname anterior: ${oldMember.nickname}\nNickname ahora: ${newMember.nickname}\nPor: <@${userID}> (ID: ${userID})`)
+                .setTimestamp()
+                .setFooter(oldMember.guild.name, oldMember.guild.iconURL())
+
+
+            let channel = client.channels.cache.get('709073424374562836');
+            channel.send(msgChannel);
+        }
+
+    })
+});
+
+client.on("guildUpdate", (oldGuild, newGuild) => {
+
+    if (!oldGuild.member(client.user).hasPermission('VIEW_AUDIT_LOG')) return;
+
+
+    oldGuild.fetchAuditLogs().then(logs => {
+
+        let userID = logs.entries.first().executor.id;
+
+        let userAvatar = logs.entries.first().executor.avatarURL();
+
+        if (oldGuild.name !== newGuild.name) {
+            let msgChannel = new Discord.MessageEmbed()
+                .setTitle('**NUEVO NOMBRE DEL SERVIDOR**')
+                .setColor('RED')
+                .setThumbnail(userAvatar)
+                .setDescription(`**Nombre del canal editado correctamente**\nNombre anterior: **${oldGuild.name}**\nNuevo nombre: **${newGuild.name}**\nPor: <@${userID}> (ID: ${userID})`)
+                .setTimestamp()
+                .setFooter(oldGuild.name, oldGuild.iconURL())
+
+            let channel = client.channels.cache.get('709078867180257391');
+            channel.send(msgChannel);
+        }
+    })
+
+});
+
+client.on("messageDelete", (message) => {
+
+    if (message.author.bot) return;
+    if (message.channel.type === 'dm') return;
+
+    if (!message.guild.member(client.user).hasPermission('MANAGE_MESSAGES')) return;
+
+    let msgChannel = new Discord.MessageEmbed()
+        .setTitle('**MENSAJE ELIMINADO**')
+        .setColor('RED')
+        //  .setThumbnail(userAvatar)
+        .setDescription(`Mensaje: ${message.content}\nID Mensaje: ${message.id}\nCanal: ${message.channel.name} (ID: ${message.channel.id})\nPor: <@${message.author.id}> (ID: ${message.author.id})`)
+        .setTimestamp()
+    // .setFooter(guild.name, guild.iconURL())
+
+    let channel = client.channels.cache.get('709076724851146842');
+    channel.send(msgChannel);
+});
+
+client.on("messageDeleteBulk", (messages) => {
+
+    let bulkDeletedMessages = messages.array().reverse()
+
+    bulkDeletedMessages.forEach(message => {
+        if (message.channel.type === 'dm') return;
+        let msgChannel = new Discord.MessageEmbed()
+            .setTitle('**MENSAJE ELIMINADO**')
+            .setColor('RED')
+            //  .setThumbnail(userAvatar)
+            .setDescription(`**Mensaje: ${message.content}\nID Mensaje: ${message.id}\nCanal: ${message.channel.name} (ID: ${message.channel.id})\nPor: <@${message.author.id}> (ID: ${message.author.id})`)
+            .setTimestamp()
+        // .setFooter(guild.name, guild.iconURL())
+
+        let channel = client.channels.cache.get('709076724851146842');
+        channel.send(msgChannel);
+
+    })
+});
+
+client.on("messageReactionAdd", (messageReaction, user) => {
+
+    if (!messageReaction.message.channel.guild) return;
+
+    if (user.bot) return;
+
+    let message = messageReaction.message;
+
+    let guild = message.guild;
+
+    let channel = message.channel;
+
+    let emoji = messageReaction.emoji.name
+
+    client.channels.cache.get('709076724851146842').send(`El usuario **${user.username}** reacciono con el emoji ${emoji} al mensaje **${message.content}** enviado en el canal <#${channel.id}> del servidor **${guild.name}**.`)
+
+
+});
+
+client.on("messageReactionRemove", (messageReaction, user) => {
+
+    if (!messageReaction.message.channel.guild) return;
+
+    let message = messageReaction.message;
+
+    let guild = message.guild;
+
+    let channel = message.channel;
+
+    let emoji = messageReaction.emoji.name
+
+    client.channels.cache.get('709078419673186384').send(`El usuario **${user.username}** elimino una reacción, emoji ${emoji} al mensaje **${message.content}** enviado en el canal <#${channel.id}> del servidor **${guild.name}**.`)
+
+});
+
+client.on("messageReactionRemoveAll", (message) => {
+
+    if (!message.guild) return;
+
+    client.channels.cache.get('709078419673186384').send(`Se eliminaron todas las reacciónes del mensaje **${message.content}** enviado en el canal <#${message.channel.id}> del servidor **${message.guild.name}**.`)
+
+});
+
+client.on("messageUpdate", (oldMessage, newMessage) => {
+
+    let nameChannel = newMessage.channel.name
+    let member = newMessage.member.displayName
+
+
+    client.channels.cache.get('709076724851146842').send(`El mensaje **${oldMessage.content}** fue editado a **${newMessage.content}**\nEn el canal **${nameChannel}** por **${member}**`)
+
+
+});
+
+
+client.on("roleCreate", (role) => {
+
+    if (!role.guild.member(client.user).hasPermission('VIEW_AUDIT_LOG')) return;
+
+
+    role.guild.fetchAuditLogs().then(logs => {
+
+        let userID = logs.entries.first().executor.id;
+
+        let userAvatar = logs.entries.first().executor.avatarURL();
+
+        let msgChannel = new Discord.MessageEmbed()
+            .setTitle('**ROL CREADO**')
+            .setColor('RED')
+            .setThumbnail(userAvatar)
+            .setDescription(`Rol: ${role.name} (ID: ${role.id})\nPor: <@${userID}> (ID: ${userID})`)
+            .setTimestamp()
+            .setFooter(role.guild.name, role.guild.iconURL())
+
+        let channel = client.channels.cache.get('709073497346801706');
+        channel.send(msgChannel);
+
+    })
+
+});
+
+client.on("roleDelete", (role) => {
+
+    if (!role.guild.member(client.user).hasPermission('VIEW_AUDIT_LOG')) return;
+
+
+    role.guild.fetchAuditLogs().then(logs => {
+
+        let userID = logs.entries.first().executor.id;
+
+        let userAvatar = logs.entries.first().executor.avatarURL();
+
+        let msgChannel = new Discord.MessageEmbed()
+            .setTitle('**ROL ELIMINADO**')
+            .setColor('RED')
+            .setThumbnail(userAvatar)
+            .setDescription(`Rol: ${role.name} (ID: ${role.id})\nPor: <@${userID}> (ID: ${userID})`)
+            .setTimestamp()
+            .setFooter(role.guild.name, role.guild.iconURL())
+
+        let channel = client.channels.cache.get('709073497346801706');
+        channel.send(msgChannel);
+
+    })
+});
+
+client.on("roleUpdate", (oldRole, newRole) => {
+
+    if (!oldRole.member(client.user).hasPermission('VIEW_AUDIT_LOG')) return;
+
+
+    oldRole.guild.fetchAuditLogs().then(logs => {
+
+        let userID = logs.entries.first().executor.id;
+
+        let userAvatar = logs.entries.first().executor.avatarURL();
+
+
+        if (oldRole.name !== newRole.name) {
+            let msgChannel = new Discord.MesssageEmbed()
+                .setTitle('**ACTUALIZACION DEL NOMBRE DE ROL**')
+                .setColor('RED')
+                .setThumbnail(userAvatar)
+                .setDescription(`**Nombre del rol editado correctamente**\nNombre anterior: **${oldRole.name}**\nNuevo nombre: **${newRole.name}**\nID rol: **${oldRole.id}**\nPor: <@${userID}> (ID: ${userID})`)
+                .setTimestamp()
+                .setFooter(oldRole.guild.name, oldRole.guild.iconURL())
+
+
+            let channel = client.channels.cache.get('709078867180257391');
+            channel.send(msgChannel);
+        }
+    })
+
+
+});
+
+
+client.on('userUpdate', (oldUser, newUser) => {
+
+    if (oldUser.username !== newUser.username) {
+
+        client.channels.cache.get('709073424374562836').send(`El usuario **${newUser.username}** actualizo su nombre\nNombre anterior: ${oldUser.username}\nAhora: ${newUser.username}.`)
+    }
+})
+
+client.on('message', (message) => {
+
+    let msg = message.content
+
+    let channel = message.channel.name
+
+    let author = message.author.username
+
+    let server = message.guild.name
+
+    console.log(`El usuario: ${author} envio ${msg} en el canal ${channel} del servidor ${server}`);
+
+})
+
+
+client.on('warn', (info) => {
+
+
+    client.channels.cache.get('709081897010987069').send(`Se ha generado una advertencia\nInformación: **${info}**`)
+
+    // por consola
+    console.log(`Se ha generado una advertencia\nInformación: ${info}`);
+
+})
+
+client.on('disconnect', () => {
+
+    let today = new Date();
+    let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+    let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+
+    client.channels.cache.get('709081897010987069').send(`[${date}][${time}]: Bot se ha desconectado.`)
+
+    console.log(`[${date}][${time}]: Bot se ha desconectado.`);
+
+})
+
+client.on('error', (error) => {
+
+
+    client.channels.cache.get('709081897010987069').send(`Se ha generado una error de conexión\nInformación: **${error}**`)
+
+    console.log(`Se ha generado una error de conexión\nInformación: ${error}`);
+
+})
+
+
+
+//--------------------------------------------Bienvenidas-----------------------------
+
+client.on('guildMemberAdd', member => {
+    let channel = client.channels.cache.get("708746241168638082")
+
+    const embed = new Discord.MessageEmbed()
+        .setTitle("¡Bienvenido!")
+        .setColor(0x03fc41)
+        .setDescription(`Hola, ${member} , ¡bienvenido a ${member.guild.name}!  Por favor lea nuestra <#708916081607180339> y las <#708916134723846184>. Espero que se quede en el servidor y lo disfrutes. 
+¡No lo olvides, invita a tus amigos!
+\n [${member.guild.memberCount}  miembros! :(]`)
+
+    channel.send({
+        embed
+    })
+});
+
+//----------------------------------------------Despedisdas-------------------------------///
+
+client.on('guildMemberRemove', member => {
+    let channel = client.channels.cache.get("708746241168638082")
+
+
+    const embed = new Discord.MessageEmbed()
+        .setTitle("¡Adiós!")
+        .setColor("RED")
+        .setDescription(`Adiós, ${member} , espero que vuelvas pronto a ${member.guild.name}.
+\n [${member.guild.memberCount}  miembros. **:(**]`)
+
+    channel.send({
+        embed
+    })
+});
+
+/* //----------------------------------Niveles Data Base-------------------------//
+
+client.on("message", async message => {
+ 
+  if(message.author.bot) return;
+
+if(message.content.indexOf(config.prefix) !== 0) return;
+
+const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
+
+const command = args.shift().toLowerCase();
+  
+
+  if (!db[message.author.id]) {
+    db[message.author.id] = {
+      xp: 0,
+      level: 1};}
+  
+  let xpAdd = 7;
+  let curxp = db[message.author.id].xp;
+  let curlvl = db[message.author.id].level;db[message.author.id].xp = curxp + xpAdd;
+  
+  let nxtLvl = db[message.author.id].level * 100;
+  if(nxtLvl <= db[message.author.id].xp){
+    db[message.author.id].level = curlvl + 1;
+  message.reply(" felicidades haz subido de nivel");}
+  
+  fs.writeFile("./db.json", JSON.stringify(db), (err) => {if(err) console.log(err)});
+  
+  if(command === "nivel"){message.channel.send(`${message.author} tu nivel es: ${curlvl} con ${curxp} experiencia`);}
+  
+  console.log(message.author.tag+ ` a ganado ${xpAdd} y ahora tiene ${curxp+xpAdd} experiencia`);
+}); 
+*/
+
+//---------------------------------comandos---------------------------------//      
+client.on("message", async (message) => {
+    if (message.author.bot) return;
+
+    if (message.content.indexOf(config.prefix) !== 0) return;
+
+    const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
+
+    const command = args.shift().toLowerCase();
+
+    const links = ["discord.gg", "discord.me", "discord.io/", "discordapp.com/invite", "https://", "https://google.com/", "https:", "https:/", "https://discord.gg/"]
+
+    if (links.some(word => message.content.toLowerCase().includes(word))) {
+
+        message.delete({
+            timeout: 150
+        })
+        message.reply("¡Oye!No envies links.").then((response) => {
+            response.delete({
+                timeout: 7000
+            });
+        });
+
+    }
+
+
+
+    //----------------------------------Kick------------------------------------//
+
+    if (command === 'kick') {
+
+        let userKick = message.mentions.members.first();
+        let razon = args.slice(1).join(' ');
+
+        if (!message.member.hasPermission("KICK_MEMBERS")) return message.reply('No tienes lo permisos para ejecutar el comando.');
+
+        if (!userKick) return message.reply('No has mencionado a un miembro.');
+
+        if (!razon) return message.reply('Debe de escribir una razón para expulsar al miembro.');
+
+        message.guild.member(userKick).kick(razon)
+        const embed = new Discord.MessageEmbed()
+            .setTitle("¡Listo!")
+            .setColor(0x03fc41)
+            .setDescription(`${userKick.user.username}, ha sido expulsado, por ${razon}.`)
+        message.channel.send(embed);
+
+    }
+    //---------------------------------------BAN---------------------------  
+    if (command === 'ban') {
+
+        let userBan = message.mentions.members.first();
+        let razon = args.slice(1).join(' ');
+
+        if (!message.member.hasPermission("BAN_MEMBERS")) return message.reply('No tienes lo permisos para ejecutar el comando.');
+
+        if (!userBan) return message.reply('No has mencionado a un miembro.');
+
+        if (!razon) return message.reply('Debe de escribir una razón para banear al miembro.');
+
+        message.guild.member(userBan).ban(razon);
+
+        const embed = new Discord.MessageEmbed()
+            .setTitle("¡Usuario baneado!")
+            .setColor(0x03fc41)
+            .setDescription(`${userBan.user.username}, fue baneado del servidor, por ${razon}.`)
+        message.channel.send(embed);
+
+    }
+    //-------------------------------------ping---------------------------------
+    if (command === 'ping') {
+
+        let ping = Math.floor(message.client.ws.ping);
+
+        message.channel.send("Si?, me necesitas?, " + ping + "ms :satellite: ");
+
+    }
+
+    // ---------------------------------AVATAR---------------------------------
+
+    if (command === 'av') {
+        message.delete()
+        let img = message.mentions.users.first()
+        if (!img) {
+            const embed = new Discord.MessageEmbed()
+                .setImage(`${message.author.avatarURL()}`)
+                .setColor(0x66b3ff)
+                .setFooter(`Avatar de ${message.author.username}#${message.author.discriminator}`);
+            message.channel.send(embed);
+
+        } else if (img.avatarURL() === null) {
+
+            message.channel.sendMessage("El usuario (" + img.username + ") no tiene avatar.");
+
+        } else {
+            const embed = new Discord.MessageEmbed()
+                .setImage(`${img.avatarURL()}`)
+                .setColor(0x66b3ff)
+                .setFooter(`Avatar de ${img.username}#${img.discriminator}, Pedido por ${message.author.username}`);
+            message.channel.send(embed);
+        };
+    } //hay dice iscriminador y discriminar es malo :V
+
+
+    if (command === 'avatar') {
+        message.delete()
+        let img = message.mentions.users.first()
+        if (!img) {
+            const embed = new Discord.MessageEmbed()
+                .setImage(`${message.author.avatarURL()}`)
+                .setColor(0x66b3ff)
+                .setFooter(`Avatar de ${message.author.username}#${message.author.discriminator}`);
+            message.channel.send(embed);
+
+        } else if (img.avatarURL() === null) {
+
+            message.channel.sendMessage("El usuario (" + img.username + ") no tiene avatar.");
+
+        } else {
+            const embed = new Discord.MessageEmbed()
+                .setImage(`${img.avatarURL()}`)
+                .setColor(0x66b3ff)
+                .setFooter(`Avatar de ${img.username}#${img.discriminator}, Pedido por ${message.author.username}`);
+            message.channel.send(embed);
+        };
+    }
+    //---------------------------------------SAY-----------------------------------
+    if (command === 'say') {
+        let user = message.member;
+        message.delete();
+        if (!message.member.hasPermission('ADMINISTRATOR')) return;
+
+        if (!args) return message.channel.send('Debes escribir un mensaje.')
+
+        message.channel.send(args.join(' '));
+
+    }
+    //----------------------------------- Say Embled ----------------------------------
+
+    if (command === 'sayembed') {
+        let say = args.join(' ')
+        message.delete()
+        if (!say) return message.channel.send("Dime que es lo que quieres que diga").then(msg => msg.delete({
+            timeout: 10000
+        }))
+        let embed = new Discord.MessageEmbed()
+            .setDescription(say)
+            .setColor("RANDOM")
+            .setAuthor(message.author.username, message.author.displayAvatarURL())
+        message.channel.send(embed)
+
+    }
+    //----------------------------------------- Mide Bergas------------------------//
+
+    if (command === "laverga") {
+
+        let usuario = message.mentions.users.first()
+        let autor = message.author
+
+        let decimal = Math.random() * 20 + 1;
+        let numero = Math.floor(decimal);
+
+        if (!usuario) {
+            const embed = new Discord.MessageEmbed()
+                .setTitle(`La Berenjena de ${autor.username} mide ${numero} centímetros`)
+                .setImage('https://lh3.googleusercontent.com/proxy/ToBJPQnGQrdlMh2GH5t3buD6EBnt4K8ZTobxKFJYWkt9a43QRgRaZOR1tfwTqY5YaY93YTQ8bSJVgSNd4dEL2wUHYlFI3r3cyYWAL1llDIYv7Sh1-FKMLP1KXwUWV_8AqDiHxPDevsahx-x1FaA1Yj0QgcfVCR4WoexsJRaK')
+                .setFooter(message.author.tag, message.author.displayAvatarURL())
+                .setColor('RANDOM')
+            message.channel.send(embed)
+        } else {
+            if (usuario == client.user) return message.channel.send('Si lo supieras O.o')
+            if (usuario.bot) return message.channel.send('No puedes realizar esta acción!')
+            const embed = new Discord.MessageEmbed()
+                .setTitle(`La Berenjena de ${usuario.username} mide ${numero} centímetros`)
+                .setImage('https://lh3.googleusercontent.com/proxy/ToBJPQnGQrdlMh2GH5t3buD6EBnt4K8ZTobxKFJYWkt9a43QRgRaZOR1tfwTqY5YaY93YTQ8bSJVgSNd4dEL2wUHYlFI3r3cyYWAL1llDIYv7Sh1-FKMLP1KXwUWV_8AqDiHxPDevsahx-x1FaA1Yj0QgcfVCR4WoexsJRaK')
+                .setFooter(usuario.tag, usuario.displayAvatarURL())
+                .setColor('RANDOM')
+            message.channel.send(embed)
+        }
+    }
+    //-----------------------------------sMP---------------------------------
+    if (command === "mp") {
+
+
+        let perms = message.member.hasPermission("ADMINISTRATOR");
+        let user = message.mentions.members.first();
+        let mensaje = args.slice(1).join(' ');
+
+        if (!perms) return message.channel.send("No tienes permisos xd")
+        if (!user) return message.channel.send("No has mencionado a nadie")
+        if (!mensaje) return message.channel.send("No has escrito el mensaje a enviar")
+
+        message.delete()
+        user.send(mensaje)
+        message.channel.send("Mensaje enviado correctamente").then(m => m.delete(10000))
+
+    }
+    //------------------------------------------------MUTE-----------------------------------
+    if (command === "mute") {
+        message.delete()
+        let persona = message.mentions.members.first()
+        let razon = args.slice(1).join(" ") || "Sin razon"
+        let permisos = message.member.hasPermission("ADMINISTRATOR")
+
+        if (!permisos) {
+            const NoPermisos = new Discord.MessageEmbed()
+                .setDescription("No tienes permisos de ADMINISTRADOR ")
+                .setColor("RED")
+            message.channel.send(NoPermisos)
+            return NoPermisos
+        }
+        if (!persona) {
+            const NoMuteado = new Discord.MessageEmbed()
+                .setDescription("No mencionaste a nadie")
+                .setColor("RED")
+            message.channel.send(NoMuteado)
+            return NoMuteado
+        }
+        if (persona === message.author) {
+            const SiMismo = new Discord.MessageEmbed()
+                .setDescription("¿Intentarás mutearte a ti mism@? que gil que sos")
+                .setColor("RED")
+            message.channel.send(SiMismo)
+            return SiMismo
+        }
+        if (persona.roles.highest.comparePositionTo(message.member.roles.highest) >= 0) {
+            const MayorRol = new Discord.MessageEmbed()
+                .setDescription("Esta persona tiene el mismo, o más poder que tú")
+                .setColor("RED")
+            message.channel.send(MayorRol)
+            return MayorRol
+        }
+        persona.roles.add("669549275096809482").catch(e => message.reply("Ocurrió un **error**"))
+
+        const Exitoso = new Discord.MessageEmbed()
+            .setDescription(`Se ha muteado a **${persona}** por **${razon}**`)
+            .setColor(0x03fc41)
+        message.channel.send(Exitoso)
+    }
+    //-----------------------------------UnMute--------------------
+
+    if (command === 'unmute') {
+
+        message.delete()
+
+        let persona = message.mentions.members.first()
+        let razon = args.slice(1).join(" ") || "Sin razón"
+        let permisos = message.member.hasPermission("ADMINISTRATOR")
+        //let rol = persona.roles.cache.find(r => r.name == "Mutiado")
+
+        if (!permisos) {
+            const NoPermisos = new Discord.MessageEmbed()
+                .setDescription("No tienes permisos de ADMINISTRADOR ")
+                .setColor("RED")
+            message.channel.send(NoPermisos)
+            return NoPermisos
+        }
+        if (!persona) {
+            const NoMencionado = new Discord.MessageEmbed()
+                .setDescription("No mencionaste a nadie")
+                .setColor("RED")
+            message.channel.send(NoMencionado)
+            return NoMencionado
+        }
+        let rol = persona.roles.cache.find(r => r.name == "Mutiado")
+
+        if (!rol) {
+            const NoMute = new Discord.MessageEmbed()
+                .setDescription("Este usuario no esta muteado")
+                .setColor("RED")
+            message.channel.send(NoMute)
+            return NoMute
+        }
+        if (persona === message.author) {
+            const SiMismo = new Discord.MessageEmbed()
+                .setDescription("¿Intentarás mutearte a ti mism@? No podes!")
+                .setColor("RED")
+            message.channel.send(SiMismo)
+            return SiMismo
+        }
+        if (persona.roles.highest.comparePositionTo(message.member.roles.highest) >= 0) {
+            const MayorRol = new Discord.MessageEmbed()
+                .setDescription("No puedes des-mutear a esta persona.")
+                .setColor("RED")
+            message.channel.send(MayorRol)
+            return MayorRol
+        }
+        persona.roles.remove("669549275096809482").catch(e => message.reply("Ocurrió un **error**"))
+
+        const Exitoso = new Discord.MessageEmbed()
+            .setDescription(`Se ha des-muteado a **${persona}** por **${razon}**`)
+            .setColor(0x03fc41)
+        message.channel.send(Exitoso)
+
+    }
+
+    //--------------------------------Reportar------------------------///  
+
+    if (command === "reportar") {
+
+
+        let usuario = message.author;
+        let reporte = args.slice(1).join(" ")
+        let reportado = message.mentions.members.first()
+        let canal = client.channels.cache.get("717052380801138808")
+
+        if (!reporte) return message.channel.send("Debes de proporcionar una razon")
+        if (!reportado) return message.channel.send(`${message.author.tag} menciona al usuario que quieres reportar`)
+
+        const ConfirmReport = new Discord.MessageEmbed()
+            .setTitle("Confirmar")
+            .setDescription("¿Estas seguro de enviar un reporte?")
+            .setColor("GREEN")
+            .addField("Mal uso", "El mal uso del comando reportar conllevara una sancion")
+            .addField("Reacciones", "Reacciona con ✅ -> Para enviar, ❎ -> Para cancelar.")
+            .setFooter(message.guild.name, message.guild.iconURL())
+            .setTimestamp()
+
+
+
+        message.channel.send(ConfirmReport).then(m => {
+            m.react("✅").then(() => {
+                m.react("❎")
+
+                setTimeout(e => {
+                    m.delete()
+                }, 15000)
+                const filtro = (reaction, user) => {
+                    return ["✅", "❎"].includes(reaction.emoji.name) && user.id == message.author.id
+                };
+
+
+
+                m.awaitReactions(filtro, {
+                    max: 1,
+                    time: 7000,
+                    errors: ["time"]
+                }).catch(() => {
+
+                    message.channel.send("No reaccionaste a tiempo...").then(message => message.delete({
+                        timeout: 6000
+                    }))
+
+                }).then(coleccionado => {
+
+                    const reaccion = coleccionado.first();
+                    if (reaccion.emoji.name === "✅") {
+
+                        const reporteEstructura = new Discord.MessageEmbed()
+                            .setTitle("Nuevo Reporte.")
+                            .setColor("BLUE")
+                            .addField("Reporte : ", reporte)
+                            .addField("Reportado", reportado)
+                            .addField("Envíado por: ", usuario)
+                            .setTimestamp()
+
+
+                        canal.send(reporteEstructura).then(m => {
+                            m.react("✅").then(() => {
+                                m.react("❌")
+                            })
+                        })
+
+
+
+                        const ReporteEnviado = new Discord.MessageEmbed()
+                            .setDescription("Tú reporte ha sido envíado con éxito")
+                            .setColor("GREEN")
+                        message.channel.send(ReporteEnviado)
+
+                    } else if (reaccion.emoji.name === "❎") {
+
+                        const ReporteNoEnviado = new Discord.MessageEmbed()
+                            .setDescription("Tú reporte fue cancelado.")
+                            .setColor("RED")
+                        message.channel.send(ReporteNoEnviado)
+
+                    }
+
+                })
+            });
+        });
+
+    }
+
+    if (command === 'sayembeda') {
+
+        let permisos = message.member.hasPermission("ADMINISTRATOR")
+
+        if (!permisos) return message.channel.send("este comando solo puede ser usado por administradores")
+
+        let texto = args.join(" ").slice(" - ")
+
+        message.delete()
+        if (!texto[0]) return message.channel.send("Dime que es lo que quieres que diga").then(msg => msg.delete({
+            timeout: 10000
+        }))
+        if (!texto[1]) return message.channel.send("te falto escribir el color")
+        let embed = new Discord.MessageEmbed()
+            .setTitle(`${texto[2]}`)
+            .setDescription(`${texto[0]}`)
+            .setColor(`${texto[1]}`)
+        message.channel.send(embed)
+
+    }
+
+
+    //----------------------CLEAR--------------------------------//
+    if (command === "clear") {
+        if (!message.member.hasPermission("MANAGE_MESSAGES")) return message.reply("**No tienes permisos para borrar mensajes**");
+
+
+        if (!args[0]) return message.channel.send("Especificai que tengo que borrar");
+
+
+        if (!args[1]) return message.channel.send("Escribe la cantidad de mensajes a borrar!");
+
+
+        if (parseInt(args[1]) == NaN) return message.channel.send("Tienes que poner la cantidad a borrar, máx. 100 msg");
+
+        if (args[0] == 'all') {
+            let cantidad = parseInt(args[1]);
+            message.channel.messages.fetch({
+                limit: 100
+            }).then(messages => message.channel.bulkDelete(cantidad))
+            message.channel.send(`**Se borraron ${cantidad} mensajes!**`)
+
+        } else if (args[0] == 'user') {
+            message.channel.messages.fetch({
+                limit: args[1]
+            }).then(messages => {
+                const Umessages = messages.filter(message => !message.author.bot)
+                message.channel.bulkDelete(Umessages)
+            })
+        } else {
+            message.reply("¡Opción incorrecta :C sad!")
+        }
+    }
+    //--------------------------------------------------memes-----------------------------------//
+    if (command === 'meme') {
+
+        let randomImage = clientmemesURL[Math.floor(Math.random() * clientmemesURL.length)]
+        return message.channel.send('', {
+            files: [randomImage]
+        }).catch(error => console.log(`${error}, URL: ${randomImage}`))
+
+
+    }
+    //---------------------------------------------------------chiste--------------------------------//   
+    if (command === 'chiste') {
+
+        superagent.get("https://risapi.glitch.me/").end((err, res) => {
+            let body = res.body;
+
+            message.channel.send(body.chiste)
+        })
+    }
+    //---------------------------------------------- calculadora de gay-----------------------------------//  
+    if (command === 'gay') {
+
+        let user = message.mentions.users.first()
+        if (!user) return message.channel.send('Menciona a 1 usuario para calcularlo');
+
+        const random = Math.floor(Math.random() * 100);
+        let heard = "";
+
+        if (random < 50) {
+            heard = ':gay_pride_flag: ';
+
+        } else if (random < 80) {
+            heard = ':gay_pride_flag:  ';
+
+        } else if (random < 100) {
+            heard = ':gay_pride_flag: ';
+
+        }
+
+        const embed = new Discord.MessageEmbed()
+            .setAuthor('El porcentaje gay de ' + user.username + ' es:')
+            .setDescription(heard + ' **' + random + ' %**' + ' ' + heard)
+            .setColor(0xff4d4d)
+
+        message.channel.send(embed);
+    }
+    //--------------------------------------------------tempmute---------------------------------
+
+    if (command == "tempmute") {
+
+        if (!message.guild.me.hasPermission(["MANAGE_ROLES", "MANAGE_CHANNELS"])) return ErrorEmbed(Discord, message, "Necesito tener el permiso de **MANAGE_ROLES** Y **MANAGE_CHANNELS**")
+
+        let mutedU = message.mentions.members.first() || message.guild.members.cache.get(args[0])
+
+        if (!mutedU) return ErrorEmbed(Discord, message, `Necesitas nombrar al usuario que quieres mutear, tambien necesitas colocar el tiempo:
+\`\`\`
+s => Para segundos.
+m => Para minutos.
+h => Para horas.
+d => Para dias.
+w => Para semanas.
+\`\`\`
+`)
+
+        if (mutedU.id == client.user.id || mutedU.id == message.author.id) return ErrorEmbed(Discord, message, "Menciona a un usuario diferentes.")
+
+        if (!args[1]) return ErrorEmbed(Discord, message, `Necesitas colocar el tiempo:
+\`\`\`
+s => Para segundos.
+m => Para minutos.
+h => Para horas.
+d => Para dias.
+w => Para semanas.
+\`\`\`
+`)
+
+        let time_v = Convert(args[1])
+
+        if (!time_v) return ErrorEmbed(Discord, message, "Formato invalido, asegurate de poner el tiempo correctamente.")
+
+        let mutedR = message.guild.roles.cache.find(r => r.name.toLowerCase() == "mutiado");
+
+
+        if (!mutedR) {
+            mutedR = await MakeRole(message, "muted", "000000", false)
+
+
+            await SetChannelperms(message, mutedR, {
+                voice: [{
+                    id: mutedR.id,
+                    type: "role",
+                    denied: ["SPEAK", "CONNECT"]
+                }],
+                text: [{
+                    id: mutedR.id,
+                    type: "role",
+                    denied: ["SEND_MESSAGES", "ADD_REACTIONS", "CREATE_INSTANT_INVITE", "ATTACH_FILES"]
+                }]
+            })
+        }
+        if (mutedU.roles.cache.has(mutedR.id)) return ErrorEmbed(Discord, message, `El usuario ${mutedU} actualmente ya se encuentra muteado.`)
+
+
+        mutedU.roles.add(mutedR.id).then(() => {
+            SuccessEmbed(Discord, message, `${mutedU} acaba de ser muteado por ${time_v.nombre}`)
+
+            setTimeout(() => {
+
+                mutedU.roles.remove(mutedR.id).then(() => {
+                    SuccessEmbed(Discord, message, `El mute del usuario ${mutedU} acaba de expirar.`)
+                }).catch(err => {
+
+                    ErrorEmbed(Discord, message, `El mute del usuario ${mutedU} acaba de expirar pero ocurrio un error al tratar de removerte el rol: **${err}**`)
+                })
+            }, time_v.tiempo)
+        }).catch(error => {
+
+            ErrorEmbed(Discord, message, `Ocurrio un error al tratar de agregar el rol: **${error.message}**`)
+        })
+
+        return;
+    }
+    //-------------------------------------------AntiLinks------------------------------_----------------------------
+
+
+    //----------------------------------_--------------------sitemas de sugerencias-------------------------
+    if (command === 'sugerir') {
+
+        if (message.deletable) message.delete();
+        let suggestion = args.join(" ");
+        if (!suggestion)
+            return message.channel
+                .send(`Tienes que poner una sugerencia!`)
+                .then(m => m.delete(15000));
+        let sChannel = message.guild.channels.cache.find(x => x.id === "708926107788902442");
+        if (!sChannel) return message.channel.send("Ups! El canal no esta definido!")
+        message.channel
+            .send("Tu sugerencia fue enviada! Gracias!")
+            .then(m => m.delete(15000));
+        let suggestembed = new Discord.MessageEmbed()
+            .setFooter(client.user.username, client.user.avatarURL)
+            .setTimestamp()
+            .addField(`Nueva Sugerencia Hecha Por:`, `**${message.author.tag}**`)
+            .addField(`Sugerencia:`, `${suggestion}\n***__¡Vota!__***`)
+            .setColor('#ff2052');
+        sChannel.send(suggestembed).then(async msg => {
+            await msg.react("✅");
+            await msg.react("❌");
+        });
+
+
+
+    }
+
+    //--------------------------------------------------Lanza una moneda-----------------------_-------
+
+    if (command === 'moneda') {
+
+        const coin = ['https://cdn.discordapp.com/attachments/315914386944557056/369580701269360656/cara.png',
+            'https://cdn.discordapp.com/attachments/315914386944557056/369580737919451137/sello.png'
+        ];
+
+
+        message.channel.send('**' + message.author.username + '** sacaste:', {
+            files: [coin[Math.floor(coin.length * Math.random())]]
+        });
+
+
+    }
+
+    //---------------------------------------------------AMOR---------------------------&&&-------------------
+    if (command === 'amor') {
+
+        let users = message.mentions.users.map(m => m.username).join(' y ');
+        if (!users) return message.channel.send('Mencione a dos usuarios para calcular');
+
+        const random = Math.floor(Math.random() * 100);
+        let heard = "";
+
+        if (random < 50) {
+            heard = ':broken_heart:';
+
+        } else if (random < 80) {
+            heard = ':sparkling_heart: ';
+
+        } else if (random < 101) {
+            heard = ':heart:';
+
+        }
+
+        const embed = new Discord.MessageEmbed()
+            .setAuthor('El porcentaje de amor de ' + users + ' es:')
+            .setDescription(heard + ' **' + random + ' %**' + ' ' + heard)
+            .setColor(0xff4d4d)
+
+        message.channel.send(embed);
+
+
+
+    }
+    //-------------------------------------------------------8Ball---------------------------------------//
+
+    if (command === "8ball") {
+        var rpts = ["Sí", "No", "Tal vez", "No sé", "¡Claro!", "Si <3", "No >:(", "No te ama", "No cabron", "Por feo", "Joto"];
+
+        let pregunt = args.slice(1).join(' ');
+        if (!pregunt) return message.channel.send(':x: | Falta la pregunta.');
+
+        const embed = new Discord.MessageEmbed()
+            .setTitle('Command | 8Ball')
+            .setColor('RANDOM')
+            .setThumbnail(message.author.avatarURL)
+            .addField('Su pregunta es:', args, true)
+            .addField('Mi respuesta es:', rpts[Math.floor(Math.random() * rpts.length)], true)
+        message.channel.send(embed)
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+});
+
+client.login(config.token);

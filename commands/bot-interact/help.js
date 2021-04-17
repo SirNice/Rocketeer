@@ -20,7 +20,7 @@ module.exports = {
             .setColor("RANDOM")
 
         embedHelp('bot-interact')
-        // embedHelp('custom-bot')
+        embedHelp('custom-bot')
         // embedHelp('custom-responses')
         embedHelp('fun')
         //embedHelp('image')
