@@ -1,4 +1,4 @@
-#  Rocketeer
+#  Miller
 
 Rocketeer es un bot de Discord, actualizado, y mantendo por SirNice#0221.
 Rocketeer se puede utilizar como plantilla para cualquier tipo de bot y contiene funciones como:
@@ -9,7 +9,7 @@ Rocketeer se puede utilizar como plantilla para cualquier tipo de bot y contiene
 
 ## Detalles
 
-El bot de Discord es "Rocketeer#1047", con la ID "712488801481523230".
+El bot de Discord es "Miller#1047", con la ID "712488801481523230".
 
 Este bot usa los siguientes librerías:
 
