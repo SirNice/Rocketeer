@@ -1,7 +1,8 @@
 const Discord = require("discord.js");
 const moment = require("moment");
 require('moment-duration-format');
-const config = require('../../package.json')
+
+const config = require('../../../package.json')
 const GuildModel = require("../../database/models/prefix_db");
 const {
     prefijo

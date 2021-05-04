@@ -15,8 +15,6 @@ const dotenv = require('dotenv').config();
 const Discord = require('discord.js');
 const fs = require('fs');
 const mongoose = require('mongoose');
-const ytdl = require('ytdl-core');
-const search = require('youtube-search');
 
 // ==== =============== ==== //
 const client = new Discord.Client();
@@ -33,9 +31,9 @@ client.eventos = new Discord.Collection()
 
 
 // ======= COMANDOS ======= //
-for(const subcarpet of fs.readdirSync('./commands/')){ 
+for(const subcarpet of fs.readdirSync(__dirname + "/commands/")){ 
 
-    for(const file of fs.readdirSync(`./commands/${subcarpet}`)){
+    for(const file of fs.readdirSync(__dirname +`/commands/${subcarpet}`)){
 
         if(file.endsWith(".js")){
             let fileContents = require(`./commands/${subcarpet}/${file}`);
@@ -50,9 +48,9 @@ for(const subcarpet of fs.readdirSync('./commands/')){
 
 // ======== EVENTOS ======== //
 
-for(const subcarpet of fs.readdirSync('./events/')){
+for(const subcarpet of fs.readdirSync( __dirname + '/events/')){
 
-    for(const file of fs.readdirSync(`./events/${subcarpet}`)){
+    for(const file of fs.readdirSync(__dirname + `/events/${subcarpet}`)){
         if(file.endsWith(".js")){
             let fileName = file.substring(0, file.length - 3);
             let fileContents = require(`./events/${subcarpet}/${file}`);
@@ -68,6 +66,7 @@ console.log(`Se han cargado ${comandosHandler} comandos, y ${eventosHandler} eve
 
 
 // ==== =============== ==== //
-
+let db = require('./database/connect')
+db()
 
 client.login(process.env.DISCORD_TOKEN);

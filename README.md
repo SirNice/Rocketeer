@@ -22,10 +22,10 @@ Este bot usa los siguientes librerías:
 Para agregar el bot a tu servidor, dale click [aquí](https://discord.com/api/oauth2/authorize?client_id=712488801481523230&permissions=0&scope=bot).
 
 
-Para tener soporte, anuncios, o novedades sobre el bot, ingrese a la [comunidad de Rocketeer](https://discord.gg/PumGHKHw5H).
+Para tener soporte, anuncios, o novedades sobre el bot, ingrese a la [comunidad de Miller](https://discord.gg/PumGHKHw5H).
 
 
-Puede aportar libremente al bot mediante [GitHub](https://github.com/SirNice/Rocketeer), ya sea por errores o mejoras, si se aprueban los cambios, los verá en el bot real.
+Puede aportar libremente al bot mediante [GitHub](https://github.com/SirNice/miller), ya sea por errores o mejoras, si se aprueban los cambios, los verá en el bot real.
 
 ## Intenciones
 
@@ -35,7 +35,7 @@ Rocketeer es un bot creado para poner practica sobre JavaScript.
 
 En un símbolo del sistema en la carpeta de proyectos (donde sea que esté) ejecute lo siguiente:
 
-`git clone https://github.com/SirNice/Rocketeer.git`
+`git clone https://github.com/SirNice/miller.git`
 
 ## Requisitos
 
