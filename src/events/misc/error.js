@@ -1,4 +1,4 @@
 
 module.exports = (client, error) => {
-    console.error("Error:", e);
+    console.error(`[ERROR] ${moment} \n ${error}`);
 }

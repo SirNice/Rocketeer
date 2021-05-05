@@ -10,13 +10,12 @@ mongoose.connect(process.env.MONGODB_URL, {
     useUnifiedTopology: true
 }).then((connection) => {
     console.info(
-        `[OK] ${moment} Conexión a Mongo realizada con éxito ${connection}`
+        `[OK] ${moment} Connection to Mongo successful ${connection}`
     );
-    this.connection = connection;
 })
 .catch((error) => {
     console.error(
-        `[ERROR] ${moment} Error al conectar con Mongo. No se ha podido establecer la conexión con el servidor\n[ERROR] ${moment} ${error}`
+        `[ERROR] ${moment} Error connecting to mongo. The connection to the server could not be established \n[ERROR] ${moment} ${error}`
     );
 });
 

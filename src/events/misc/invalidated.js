@@ -1,6 +1,6 @@
 
 module.exports = (client) => {
-    bot.destroy();
-    console.log("¡La sesión es inválida!");
-    process.exit(1);
+    client.destroy();
+    console.log("The session is invalid");
+    process.exit();
 }

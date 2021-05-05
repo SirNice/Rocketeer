@@ -1,35 +1,27 @@
 
-// ==== REQUIRIMIENTOS ===== //
-
 const dotenv = require('dotenv').config();
+
 const Discord = require('discord.js');
 const fs = require('fs');
-const mongoose = require('mongoose');
 
 // ==== =============== ==== //
 const client = new Discord.Client();
-const queue = new Map();
-
-module.exports = { queue: queue }
-
-let comandosHandler = 0;
-let eventosHandler = 0;
+let moment = new Date().toLocaleTimeString();
 
 
-client.comandos = new Discord.Collection()
-client.eventos = new Discord.Collection()
+client.commands = new Discord.Collection()
+client.commands = new Discord.Collection()
 
 
-// ======= COMANDOS ======= //
+// ======= COMMANDS ======= //
 for (const subcarpet of fs.readdirSync(__dirname + "/commands/")) {
 
   for (const file of fs.readdirSync(__dirname + `/commands/${subcarpet}`)) {
 
     if (file.endsWith(".js")) {
       let fileContents = require(`./commands/${subcarpet}/${file}`);
-      let fileName = fileContents.nombre;
-      client.comandos.set(fileName, fileContents);
-      comandosHandler++
+      let fileName = fileContents.name;
+      client.commands.set(fileName, fileContents);
     }
 
   }
@@ -46,17 +38,15 @@ for (const subcarpet of fs.readdirSync(__dirname + '/events/')) {
       let fileContents = require(`./events/${subcarpet}/${file}`);
       client.on(fileName, fileContents.bind(null, client));
       delete require.cache[require.resolve(`./events/${subcarpet}/${file}`)];
-      eventosHandler++
     }
   }
 }
-// ==== =============== ==== //
-
-console.log(`Se han cargado ${comandosHandler} comandos, y ${eventosHandler} eventos.`);
 
 
 // ==== =============== ==== //
 require('./database/connect')();
-
 require('./server')();
-client.login(process.env.DISCORD_TOKEN);
+client.login(process.env.DISCORD_TOKEN).catch(e => { 
+  console.error(`[ERROR] ${moment} TOKEN IVALID`) 
+  process.exit()
+})

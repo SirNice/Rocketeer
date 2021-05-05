@@ -1,10 +1,10 @@
 const Discord = require("discord.js");
-const GuildModel = require("../../database/models/prefix_db");
+const GuildModel = require("../../database/models/Guild");
 
 module.exports = {
-    nombre: "setprefix",
-    alias: ['changeprefix'],
-    description: "cambia el prefix del servidor",
+    name: "setprefix",
+    aliases: [],
+    description: "change prefix of the server",
     run: async (client, message, args) => {
 
         let permiso = 'ADMINISTRATOR'
@@ -13,27 +13,27 @@ module.exports = {
             return message.channel.send("**``Error``** | No tienes permisos de ``" + permiso + "``.");
         }
 
-        let nuevoprefijo = args[0];
+        let newPrefix = args[0];
 
 
-        if (!nuevoprefijo) return message.channel.send('**``Error``** | Coloca el nuevo prefijo.')
+        if (!newPrefix) return message.channel.send('**``Error``** | Coloca el nuevo prefijo.')
         //ahora buscamos un modelo con la id del servidor
-        let modelo = await GuildModel.findOne({
-            id: message.guild.id
+        let model = await GuildModel.findOne({
+            guildID: message.guild.id
         })
         //esta variable por si no si no encuentra uno 
         let dt = new GuildModel({
-            id: message.guild.id,
-            prefix: nuevoprefijo
+            guildID: message.guild.id,
+            prefix: newPrefix
         })
         //en esta linea si encuentra un modelo con la id del guild, pues lo actualizamos, y si no tiene llama a la variable dt y la guarda.
-        modelo ? await GuildModel.updateOne({
-            id: message.guild.id
+        model ? await GuildModel.updateOne({
+            guildID: message.guild.id
         }, {
-            prefix: nuevoprefijo
+            prefix: newPrefix
         }) : await dt.save()
         //y mandamos un mensaje de confirmacion
-        message.channel.send(`**\`\`Done\`\`** | Mi nuevo prefijo ahora es **${nuevoprefijo}**`)
+        message.channel.send(`**\`\`Done\`\`** | Mi nuevo prefijo ahora es **${newPrefix}**`)
 
 
     }

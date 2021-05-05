@@ -10,12 +10,12 @@ module.exports = (client) => {
 
 
     setInterval(function () {
-        var estados = ["Hello."]
-        let estado = estados[Math.floor(estados.length * Math.random())];
+        let estados = ["Hello."]
+        let status = estados[Math.floor(estados.length * Math.random())];
         client.user.setPresence({
             status: "online",
             activity: {
-                name: estado,
+                name: status,
                 type: "PLAYING", //LISTENINIG (ESCUCHANDO) //WATCHING (MIRANDO) //PLAYING (JUGANDO)
             }
         })

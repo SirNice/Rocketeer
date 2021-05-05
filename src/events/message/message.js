@@ -1,36 +1,12 @@
-const Discord = require('discord.js');
-const mongoose = require('mongoose')
-const {
-    prefijo
-} = require('../../config/config.json');
 
-const GuildModel = require("../../database/models/prefix_db");
-
-const { queue } = require('../../index.js')
+const GuildModel = require("../../database/models/Guild");
 
 module.exports = async (client, message) => {
 
-    const serverQueue = queue.get(message.guild.id);
-
-
-    // ============ BAD WORDS ============ //
-
-    let words = [
-        "gay axel", "axel gay"
-    ]
-
-    let messageContent = message.content.toLowerCase();
-    if (words.some(word => messageContent.includes(word))) {
-        message.channel.send(`${message.author} estamos de acuerdo.`)
-            .then(() => console.log('si'))
-    }
-
-    // ============ BAD WORDS ============ //
-
-    const modelo = await GuildModel.findOne({
-        id: message.guild.id
+    const model = await GuildModel.findOne({
+        guildID: message.guild.id
     });
-    const prefix = modelo ? modelo.prefix : prefijo;
+    const prefix = model ? model.prefix : "m!";
 
     if (message.author.bot) return;
     if (message.channel.type == 'dm') return;
@@ -39,7 +15,7 @@ module.exports = async (client, message) => {
     let args = message.content.slice(prefix.length).trim().split(/ +/g);
     let command = args.shift().toLowerCase();
 
-    let cmd = client.comandos.get(command) || client.comandos.find((c) => c.alias.includes(command));
+    let cmd = client.commands.get(command) || client.commands.find((c) => c.aliases.includes(command));
 
     if (cmd) {
         return cmd.run(client, message, args)
