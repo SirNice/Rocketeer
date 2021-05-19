@@ -1,6 +1,6 @@
 module.exports = {
-        nombre: "reboot",
-        alias: ['restart', "reload"],
+        name: "reboot",
+        aliases: ['restart', "reload"],
         description: "Description",
         run: async (client, message, args) => {
 

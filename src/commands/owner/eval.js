@@ -9,7 +9,7 @@ function clean(text) {
 
 module.exports = {
     name: "eval",
-    aliases: [],
+    aliases: ['e'],
     description: "eval",
     run: async (client, message, args) => {
         
