@@ -10,7 +10,6 @@ let moment = new Date().toLocaleTimeString();
 
 
 client.commands = new Discord.Collection()
-client.commands = new Discord.Collection()
 
 
 // ======= COMMANDS ======= //
@@ -47,6 +46,7 @@ for (const subcarpet of fs.readdirSync(__dirname + '/events/')) {
 require('./database/connect')();
 require('./server')();
 require('happy-developer')()
+
 client.login(process.env.DISCORD_TOKEN).catch(e => {
   console.error(`[ERROR] ${moment} TOKEN IVALID`)
   process.exit()

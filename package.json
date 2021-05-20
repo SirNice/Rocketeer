@@ -12,6 +12,13 @@
     "type": "git",
     "url": "git+https://github.com/SirNice/miller.git"
   },
+  "keywords": [
+    "discord.js",
+    "miller",
+    "discord",
+    "bot",
+    "chatbot"
+  ],
   "author": "SirNice (Michael Liendo)",
   "license": "Apache-2.0",
   "bugs": {
