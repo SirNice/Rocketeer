@@ -1,6 +1,13 @@
+module.exports = class{
+    constructor(client){
+        this.client = client;
+    }
+    
+    async run(){
 
-module.exports = (client) => {
-    client.destroy();
-    console.log("The session is invalid");
-    process.exit();
+        client.destroy();
+        console.log("The session is invalid");
+        process.exit();
+
+    }
 }

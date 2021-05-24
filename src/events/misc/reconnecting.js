@@ -1,5 +1,11 @@
 
-module.exports = (client) => {
-
-    console.log(`[INFO] ${moment} Reconnecting `);
+module.exports = class{
+    constructor(client){
+        this.client = client;
+    }
+    
+    async run(){
+        
+        console.log(`[INFO] ${moment} Reconnecting `);
+    }
 }

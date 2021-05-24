@@ -1,4 +1,10 @@
-
-module.exports = (client, error) => {
-    console.error(`[ERROR] ${moment} \n ${error}`);
+module.exports = class{
+    constructor(client){
+        this.client = client;
+    }
+    
+    async run(){
+        
+        console.error(`[ERROR] ${moment} \n ${error}`);
+    }
 }

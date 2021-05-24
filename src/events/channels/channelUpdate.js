@@ -1,5 +1,10 @@
-const Discord = require('discord.js');
 
-module.exports = (client, oldChannel, newChannel) => {
+module.exports = class{
+    constructor(client){
+        this.client = client;
+    }
 
+    async run(){
+
+    }
 }

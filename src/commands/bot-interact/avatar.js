@@ -1,10 +1,16 @@
-const Discord = require("discord.js");
+const Command = require('../../assets/class/Command')
 
-module.exports = {
-    name: "avatar",
-    aliases: ["av"],
-    description: "muestra el avatar del usuario",
-    run: async (client, message, args) => {
+class Avatar extends Command {
+    constructor(client) {
+        super(client, {
+            name: "avatar",
+            description: "show avatar of user on mencion",
+            usage: "ping",
+            aliases: ['av']
+        })
+    }
+
+    async run(message, args){
         let member =
             (await message.mentions.members.first()) ||
             message.guild.members.resolve(args[0]) ||
@@ -26,5 +32,5 @@ module.exports = {
             );
 
         await message.channel.send(embed);
-    },
-};
+    }
+}
