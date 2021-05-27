@@ -9,7 +9,7 @@ module.exports = class Exec extends Commands {
         });
     }
     
-    async run(message) {
+    async run(message, args) {
         if (message.author.id !== "668256065174896681") return message.channel.send('What made you think you would be able to do that?');
         
         childProcess.exec(args.join(' '), {},

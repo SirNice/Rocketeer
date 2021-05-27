@@ -1,7 +1,7 @@
-import { MessageEmbed } from 'discord.js';
-import Commands from '../../structures/Command';
+const Discord = require('discord.js')
+const Commands = require('../../structures/Command');
 
-export default class Avatar extends Commands {
+module.exports = class Avatar extends Commands {
     constructor(client) {
         super(client, {
             name: 'avatar'
@@ -14,7 +14,7 @@ export default class Avatar extends Commands {
         message.guild.members.resolve(args[0]) ||
         message.member;
 
-    const embed = new MessageEmbed()
+    const embed = new Discord.MessageEmbed()
         .setTitle("Avatar")
         .setImage(
             member.user.displayAvatarURL({
