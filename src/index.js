@@ -14,18 +14,3 @@ const shards = new ShardingManager(path.join(__dirname, 'bot.js'),{
 })
 
 shards.spawn()
-
-
-
-/*
-Miller.login(process.env.DISCORD_TOKEN).catch(e => {
-  console.error(`[ERROR] ${moment}  ${e}`)
-  process.exit()
-})*/
-// const { ShardingManager } = require('discord.js-light')
-
-// const shards = new ShardingManager(path.join(__dirname, 'bot.js'), {
-//     token: process.env.BOT_TOKEN
-// })
-
-// shards.spawn()
