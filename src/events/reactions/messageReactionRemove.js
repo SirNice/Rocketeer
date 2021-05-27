@@ -1,10 +1,13 @@
 
-module.exports = class{
-    constructor(client){
-        this.client = client;
+const Events = require('../../structures/Event')
+
+module.exports = class MessageReactionRemove extends Events {
+    constructor(client) {
+        super(client, {
+            name: 'messageReactionRemove'
+        })
     }
-
-    async run(){
-
+    run() {
+        
     }
 }

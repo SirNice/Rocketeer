@@ -1,10 +1,14 @@
-module.exports = class{
-    constructor(client){
-        this.client = client;
+
+const Events = require('../../structures/Event')
+let moment = new Date().toLocaleTimeString();
+
+module.exports = class error extends Events {
+    constructor(client) {
+        super(client, {
+            name: 'error'
+        })
     }
-    
-    async run(){
-        
+    run() {
         console.error(`[ERROR] ${moment} \n ${error}`);
     }
 }

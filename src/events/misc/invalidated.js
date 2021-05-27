@@ -1,13 +1,17 @@
-module.exports = class{
-    constructor(client){
-        this.client = client;
+
+const Events = require('../../structures/Event')
+let moment = new Date().toLocaleTimeString();
+
+module.exports = class invalidated extends Events {
+    constructor(client) {
+        super(client, {
+            name: 'invalidated'
+        })
     }
-    
-    async run(){
-
-        client.destroy();
-        console.log("The session is invalid");
+    run() {
+        this.client.destroy();
+        console.log(`[ERROR] ${moment} The session is invalid`);
         process.exit();
-
+        
     }
 }

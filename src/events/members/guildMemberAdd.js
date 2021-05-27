@@ -1,10 +1,13 @@
 
-module.exports = class{
-    constructor(client){
-        this.client = client;
+const Events = require('../../structures/Event')
+
+module.exports = class GuildMemberAdd extends Events {
+    constructor(client) {
+        super(client, {
+            name: 'guildMemberAdd'
+        })
     }
-
-    async run(){
-
+    run() {
+        
     }
 }

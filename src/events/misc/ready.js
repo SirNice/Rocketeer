@@ -1,15 +1,19 @@
 const Discord = require("discord.js");
 let moment = new Date().toLocaleTimeString();
 
-module.exports = class {
+const Events = require('../../structures/Event')
+
+module.exports = class Ready extends Events {
     constructor(client) {
-        this.client = client;
+        super(client, {
+            name: 'ready'
+        })
     }
+    run() {
+        
+        console.log(`[OK] ${moment} iniciated as ${this.client.user.tag}!`);
 
-    async run(client) {
-        console.log(`[OK] ${moment} iniciated as ${client.user.tag}!`);
-
-        setInterval(function () {
+        /*setInterval(function () {
             let estados = ["Hello."];
             let status = estados[Math.floor(estados.length * Math.random())];
             client.user.setPresence({
@@ -19,6 +23,7 @@ module.exports = class {
                     type: "PLAYING", //LISTENINIG (ESCUCHANDO) //WATCHING (MIRANDO) //PLAYING (JUGANDO)
                 },
             });
-        }, 10000);
+        }, 10000);*/
     }
-};
+}
+

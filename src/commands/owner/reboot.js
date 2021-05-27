@@ -1,17 +1,20 @@
-module.exports = {
-        name: "reboot",
-        aliases: ['restart', "reload"],
-        description: "Description",
-        run: async (client, message, args) => {
 
-            if (message.author.id !== "668256065174896681") return message.channel.send('What made you think you would be able to do that?');
+const Commands = require('../../structures/Command');
 
-            message.channel.send('Reboot');
-            
-            setInterval(() => {                
-                process.exit();
-            }, 2000);
-
-        
+module.exports = class Reboot extends Commands {
+    constructor(client) {
+        super(client, {
+            name: 'reboot'
+        });
     }
-}
+
+    async run(message) {
+        if (message.author.id !== "668256065174896681") return message.channel.send('What made you think you would be able to do that?');
+
+        message.channel.send('Reboot');
+        
+        setInterval(() => {                
+            process.exit();
+        }, 2000);
+    }
+};

@@ -1,11 +1,14 @@
 
-module.exports = class{
-    constructor(client){
-        this.client = client;
-    }
-    
-    async run(){
-        console.log(`[INFO] ${moment} You have been disconnected`);
+const Events = require('../../structures/Event')
+let moment = new Date().toLocaleTimeString();
 
+module.exports = class disconnected extends Events {
+    constructor(client) {
+        super(client, {
+            name: 'disconnected'
+        })
+    }
+    run() {
+        console.info(`[INFO] ${moment} You have been disconnected`);
     }
 }
