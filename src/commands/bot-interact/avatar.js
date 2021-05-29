@@ -4,7 +4,8 @@ const Commands = require('../../structures/Command');
 module.exports = class Avatar extends Commands {
     constructor(client) {
         super(client, {
-            name: 'avatar'
+            name: 'avatar',
+            aliases: ['av']
         });
     }
 

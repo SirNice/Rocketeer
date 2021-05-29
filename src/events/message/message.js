@@ -1,4 +1,4 @@
-
+const GuildModel = require('../../database/models/Guild')
 const Events = require('../../structures/Event')
 
 module.exports = class Message extends Events {
@@ -10,14 +10,10 @@ module.exports = class Message extends Events {
 
     async run(message) {
 
-        const prefix = "m!";
-    
-        const prefixes = [prefix, `<@${this.client.user.id}>`, `<@!${this.client.user.id}>`];
-
+        let prefix = '!';
         if (!message.author) return;
-        if (message.author.bot) return;
-        if (message.channel.type == 'dm') return;
-        
+
+        const prefixes = [prefix, `<@${this.client.user.id}>`, `<@!${this.client.user.id}>`];
 
         const usedPrefix = prefixes.find((p) => message.content.startsWith(p));
         if (!usedPrefix || message.author.bot) return;
@@ -32,7 +28,6 @@ module.exports = class Message extends Events {
         try {
             if (!cmd.canRun(message)) return;
             cmd.run(message, args);
-            console.log(cmd)
         } catch (e) {
             console.log(e.stack || e);
             message.channel.send(`Un error a ocurrido: ${e.message || e}`);
