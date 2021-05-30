@@ -2,7 +2,10 @@ const mongoose = require('mongoose');
 
 const Guild = mongoose.Schema({
     id: String,
-    prefix: String,
+    prefix: {
+        type: String,
+        default: "m!"
+    },
     lang: {
         type: String,
         default: "en"

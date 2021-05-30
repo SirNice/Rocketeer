@@ -10,20 +10,25 @@ module.exports = class Message extends Events {
 
     async run(message) {
 
-        let prefix = '!';
+        let prefix = 'm!';
+        const model = await GuildModel.findOne({
+            id: message.guild.id
+        });
+        if (model && model.prefix) prefix = model.prefix;
+
         if (!message.author) return;
 
         const prefixes = [prefix, `<@${this.client.user.id}>`, `<@!${this.client.user.id}>`];
 
         const usedPrefix = prefixes.find((p) => message.content.startsWith(p));
         if (!usedPrefix || message.author.bot) return;
-        if (usedPrefix !== prefix)
-            message.mentions.users.delete(message.mentions.users.first().id);
+        if (usedPrefix !== prefix) message.mentions.users.delete(message.mentions.users.first().id);
 
         const args = message.content.slice(usedPrefix.length).trim().split(/ +/g);
         const command = args.shift().toLowerCase();
 
         const cmd = this.client.commands.find(c => c.name === command || c.aliases.includes(command));
+
         if (!cmd) return;
         try {
             if (!cmd.canRun(message)) return;
