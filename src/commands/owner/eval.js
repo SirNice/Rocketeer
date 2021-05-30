@@ -10,12 +10,13 @@ module.exports = class Eval extends Commands {
     constructor(client) {
         super(client, {
             name: 'eval',
-            aliases: ['e']
+            aliases: ['e'],
+            devsOnly: true
         });
     }
 
     async run(message, args) {
-        if (message.author.id !== '668256065174896681') return message.channel.send('What made you think you would be able to do that?');
+
         args = args.join(" ");
         try {
             var evaled = eval(args);
