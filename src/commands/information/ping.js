@@ -7,6 +7,10 @@ module.exports = class Ping extends Commands {
         });
     }
 
-    async run(message) {
-        message.channel.send(`Pong! Took ${message.createdAt - Date.now()}ms. ${Math.round(this.client.ws.ping)}ms.`)    }
+    async run(message, args, lang) {
+
+        let msg = lang.information.ping.message.replace('{ping}', message.createdAt - Date.now()).replace('{pingClient}', Math.round(this.client.ws.ping))
+
+        message.channel.send(msg)
+    }
 };

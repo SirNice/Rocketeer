@@ -9,7 +9,7 @@ module.exports = class SetLang extends Commands {
         });
     }
 
-    async run(message, args) {
+    async run(message, args, lang) {
 
         let langs = []
 
@@ -21,8 +21,8 @@ module.exports = class SetLang extends Commands {
             }
         }
 
-        let lang = args[0]
-        if (!lang || !langs.includes(args[0])) return message.channel.send('Coloca un lenguaje válido')
+        let language = args[0]
+        if (!language || !langs.includes(args[0])) return message.channel.send(lang.custombot.setlang.checker)
 
         let model = await GuildModel.findOne({
             id: message.guild.id
@@ -30,16 +30,16 @@ module.exports = class SetLang extends Commands {
 
         let guild = new GuildModel({
             id: message.guild.id,
-            lang: lang
+            lang: language
         })
 
         model ? await GuildModel.updateOne({
             id: message.guild.id
         }, {
-            lang: lang
+            lang: language
         }) : await guild.save()
 
-        message.channel.send(`Mi nuevo prefijo ahora es ${lang}`)
+        message.channel.send(`${lang.custombot.setlang.finish} ${language}`)
 
     }
 };

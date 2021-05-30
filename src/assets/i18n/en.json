@@ -1,0 +1,34 @@
+{
+    "botinteract": {
+        "avatar": {
+            "footer": "Your avatar",
+            "footer2": "The avatar of"
+        }
+    },
+    "custombot": {
+        "setlang": {
+            "checker": "Please enter a valid language.",
+            "finish": "The new language has been established."
+        },
+        "setprefix": {
+            "checker": "Enter a prefix",
+            "finish": "The new prefix has been set:"
+        }
+    },
+    "customresponses": {},
+    "fun": {},
+    "image": {},
+    "information": {
+        "ping": {
+            "message": "Pong! Took {ping}ms. {pingClient}ms."
+        }
+    },
+    "level": {},
+    "mod": {},
+    "music": {},
+    "owner": {},
+    "roles": {},
+    "ticket": {},
+    "utility": {},
+    "welcome": {}
+}

@@ -8,11 +8,11 @@ module.exports = class SetPrefix extends Commands {
         });
     }
 
-    async run(message, args) {
+    async run(message, args, lang) {
 
         let newPrefix = args[0];
 
-        if (!newPrefix) return message.channel.send('Coloca el nuevo prefijo')
+        if (!newPrefix) return message.channel.send(lang.custombot.setprefix.checker)
 
         let modelo = await GuildModel.findOne({
             id: message.guild.id
@@ -29,7 +29,7 @@ module.exports = class SetPrefix extends Commands {
             prefix: newPrefix
         }) : await dt.save()
 
-        message.channel.send(`Mi nuevo prefijo ahora es ${newPrefix}`)
+        message.channel.send(`${lang.custombot.setprefix.checker} ${newPrefix}`)
 
     }
 };
