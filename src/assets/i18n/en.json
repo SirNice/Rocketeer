@@ -30,5 +30,21 @@
     "roles": {},
     "ticket": {},
     "utility": {},
-    "welcome": {}
+    "welcome": {},
+    "structure":{
+        "command":{
+            "cooldown":"You are in cooldown, wait to be able to execute the command again",
+            "enabled":"This command is under maintenance",
+            "guildOnly":"This command can only be run on servers.",
+            "nsfwOnly":"This command can only be run on NSFW channels.",
+            "memberPerms": {
+                "guild": "You need the following permissions",
+                "channel": "You need the following permissions on this channel:"
+            },
+            "botPerms": {
+                "guild": "I need the following permissions:",
+                "channel": "I need the following permissions on this channel:"
+            }
+        }
+    }
 }

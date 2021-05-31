@@ -27,13 +27,14 @@ module.exports = class Message extends Events {
         const args = message.content.slice(usedPrefix.length).trim().split(/ +/g);
         const command = args.shift().toLowerCase();
 
-        let lang;
-        if(model.lang == "es"){
-            lang = require('../../assets/i18n/es.json')
-        } else if (model.lang == "en"){
-            lang = require('../../assets/i18n/en.json')
-        } else {
-            lang = require('../../assets/i18n/en.json')
+        let lang = require('../../assets/i18n/en.json')
+
+        if(model && model.lang){
+            if(model.lang == "es"){
+                lang = require('../../assets/i18n/es.json')
+            } else if (model.lang == "en"){
+                lang = require('../../assets/i18n/en.json')
+            } 
         }
 
         const cmd = this.client.commands.find(c => c.name === command || c.aliases.includes(command));
