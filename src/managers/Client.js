@@ -21,6 +21,9 @@ module.exports = class Bot extends Client {
         this.commands = new Commands(this)
         this.commands.load()
         this.devs = process.env.DEVS ? process.env.DEVS.split(', ') : [];
-        this.login(process.env.BOT_TOKEN)
+        this.login(process.env.BOT_TOKEN).catch(e => {
+            console.error(`[ERROR] ${moment}  ${e}`)
+            process.exit()
+        })
     }
 }

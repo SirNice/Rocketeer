@@ -14,9 +14,8 @@ module.exports = class Command {
             guild: options.memberPerms?.guild || [],
             channel: options.memberPerms?.channel || []
         }
-        this.cooldown = options.cooldown || 1;
+        this.cooldown = options.cooldown || 2;
         this.enabled = typeof options.enabled === 'boolean' ? options.enabled : true;
-        this.guildOnly = typeof options.guildOnly === 'boolean' ? options.guildOnly : this.category !== 'General';
         this.nsfwOnly = typeof options.nsfwOnly === 'boolean' ? options.nsfwOnly : false;
         this.devsOnly = typeof options.devsOnly === 'boolean' ? options.devsOnly : false;
         this.cooldowns = new Collection();
@@ -39,12 +38,10 @@ module.exports = class Command {
                 lang = require('../assets/i18n/en.json')
             } 
         }
-
         if (message.guild && !message.channel.permissionsFor(message.guild.me).has('SEND_MESSAGES')) return false;
         if (this.devsOnly && !this.client.devs.includes(message.author.id)) return false;
         if (this.checkCooldowns(message)) return !message.channel.send(`${lang.structure.command.cooldown}`);
         if (!this.enabled && !this.client.devs.includes(message.author.id)) return !message.channel.send(`${lang.structure.command.enabled}`);
-        if (this.guildOnly && !message.guild) return !message.channel.send(`${lang.structure.command.guildOnly}`);
         if (message.guild && !message.channel.nsfw && this.nsfwOnly) return !message.channel.send(`${lang.structure.command.nsfwOnly}`);
         if (message.guild && this.memberPerms.guild[0] && !this.memberPerms.guild.every((x) => message.member.permissions.has(x)) && !this.client.devs.includes(message.author.id))
             return !message.channel.send(`${lang.structure.command.memberPerms.guild} \`${this.memberPerms.guild.map(this.parsePermission).join(', ')}\``);

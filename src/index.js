@@ -1,12 +1,6 @@
 require('dotenv').config()
-const path = require('path')
+new (require('./managers/Client'))()
 
-const { ShardingManager } = require('discord.js')
-
-// ==== =============== ==== //
-
-const shards = new ShardingManager(path.join(__dirname, 'bot.js'),{
-  token: process.env.BOT_TOKEN
-})
-
-shards.spawn()
+require('./database/connect');
+require('./server')
+require('happy-developer')()

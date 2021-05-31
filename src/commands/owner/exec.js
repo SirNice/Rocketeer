@@ -5,12 +5,12 @@ const Commands = require('../../structures/Command');
 module.exports = class Exec extends Commands {
     constructor(client) {
         super(client, {
-            name: 'exec'
+            name: 'exec',
+            devsOnly: true
         });
     }
     
     async run(message, args) {
-        if (message.author.id !== "668256065174896681") return message.channel.send('What made you think you would be able to do that?');
         
         childProcess.exec(args.join(' '), {},
         (err, stdout) => {

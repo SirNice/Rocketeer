@@ -9,6 +9,7 @@ module.exports = class Message extends Events {
     }
 
     async run(message) {
+        if(message.channel.type === "dm") return;
 
         let prefix = 'm!';
         const model = await GuildModel.findOne({
@@ -41,7 +42,7 @@ module.exports = class Message extends Events {
 
         if (!cmd) return;
         try {
-            if (!cmd.canRun(message)) return;
+            if(!(await cmd.canRun(message))) return;
             cmd.run(message, args, lang);
         } catch (e) {
             console.log(e.stack || e);
