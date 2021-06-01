@@ -22,7 +22,7 @@ module.exports = class SetLang extends Commands {
         }
 
         let language = args[0]
-        if (!language || !langs.includes(args[0])) return message.channel.send(lang.custombot.setlang.checker)
+        if (!language || !langs.includes(args[0])) return message.channel.send(lang.customBot.setlang.checker)
 
         let model = await GuildModel.findOne({
             id: message.guild.id
@@ -39,7 +39,7 @@ module.exports = class SetLang extends Commands {
             lang: language
         }) : await guild.save()
 
-        message.channel.send(`${lang.custombot.setlang.finish} ${language}`)
+        message.channel.send(`${lang.customBot.setlang.finish} ${language}`)
 
     }
 };

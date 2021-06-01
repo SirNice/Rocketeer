@@ -17,6 +17,7 @@ module.exports = class Avatar extends Commands {
 
     const embed = new Discord.MessageEmbed()
         .setTitle("Avatar")
+        .setDescription(`[${lang.botInteract.avatar.view}](https://test.com)`)
         .setImage(
             member.user.displayAvatarURL({
                 dynamic: true,
@@ -26,8 +27,8 @@ module.exports = class Avatar extends Commands {
         .setColor(member.displayHexColor)
         .setFooter(
             member.id === message.member.id ?
-            `${lang.botinteract.avatar.footer} ${member.displayName}` :
-            `${lang.botinteract.avatar.footer2} ${member.displayName}`
+            `${lang.botInteract.avatar.footer} ${member.displayName}` :
+            `${lang.botInteract.avatar.footer2} ${member.displayName}`
         );
 
     await message.channel.send(embed);

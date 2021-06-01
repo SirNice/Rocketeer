@@ -1,6 +1,7 @@
 const { Client, Intents } = require('discord.js')
 const Commands = require('./Commands')
 const Events = require('./Events')
+const Reload = require('./Reload')
 module.exports = class Bot extends Client {
     constructor() {
         super({

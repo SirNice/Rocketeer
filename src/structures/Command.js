@@ -14,7 +14,7 @@ module.exports = class Command {
             guild: options.memberPerms?.guild || [],
             channel: options.memberPerms?.channel || []
         }
-        this.cooldown = options.cooldown || 2;
+        this.cooldown = options.cooldown || 1;
         this.enabled = typeof options.enabled === 'boolean' ? options.enabled : true;
         this.nsfwOnly = typeof options.nsfwOnly === 'boolean' ? options.nsfwOnly : false;
         this.devsOnly = typeof options.devsOnly === 'boolean' ? options.devsOnly : false;

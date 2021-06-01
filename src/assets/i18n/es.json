@@ -1,11 +1,12 @@
 {
-    "botinteract":{
+    "botInteract":{
         "avatar":{
+            "view":"Ve el avatar en el navegador",
             "footer":"Tu avatar",
             "footer2":"El avatar de"
         }
     },
-    "custombot":{
+    "customBot":{
         "setlang":{
             "checker":"Ingresa un lenguaje válido.",
             "finish":"El nuevo lenguaje se ha establecido."
@@ -15,7 +16,7 @@
             "finish":"El nuevo prefix se ha establecido:"
         }
     },
-    "customresponses":{},
+    "customResponses":{},
     "fun":{},
     "image":{},
     "information":{
